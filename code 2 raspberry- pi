@@ -1,0 +1,58 @@
+#include <SoftwareSerial.h>
+#include <ESP8266WiFi.h>
+#include <BlynkSimpleEsp8266.h>
+#include <LiquidCrystal.h>
+
+// Pin Definitions
+SoftwareSerial nodemcu(8, 9);  // NodeMCU communication
+int pinRedLed = 12, pinGreenLed = 11, pinSensor = A5, buzzer = 10;
+int THRESHOLD = 250;  // Spoilage threshold
+
+// Wi-Fi and Blynk Setup
+char auth[] = "4UJYZmXwiR7T6wqhMnB57uYSkW7yPCt8";
+char ssid[] = "GAGAN-LAPTOP 0958";
+char pass[] = "12345678";
+BlynkTimer timer;  // Blynk timer
+
+// Setup function
+void setup() {
+  Serial.begin(9600);         // Debugging on Serial Monitor
+  nodemcu.begin(9600);         // Communication with ESP8266
+  pinMode(buzzer, OUTPUT);     // Setup pins
+  pinMode(pinRedLed, OUTPUT);
+  pinMode(pinGreenLed, OUTPUT);
+  pinMode(pinSensor, INPUT);
+
+  Blynk.begin(auth, ssid, pass);  // Connect to Blynk
+  timer.setInterval(1000L, sensorvalue1);  // Send sensor data every second
+}
+
+// Main loop
+void loop() {
+  Blynk.run();  // Handle Blynk communication
+  timer.run();  // Run Blynk timer
+  
+  int methaneValue = analogRead(pinSensor);  // Read sensor value
+  Serial.print("Methane Range: ");
+  Serial.println(methaneValue);
+
+  // Check if methane exceeds threshold
+  if (methaneValue >= THRESHOLD) {
+    digitalWrite(pinRedLed, HIGH);
+    digitalWrite(pinGreenLed, LOW);
+    digitalWrite(buzzer, HIGH);
+    nodemcu.println("Food Spoiled");
+  } else {
+    digitalWrite(pinRedLed, LOW);
+    digitalWrite(pinGreenLed, HIGH);
+    digitalWrite(buzzer, LOW);
+    nodemcu.println("Methane Range: " + String(methaneValue));
+  }
+  delay(1000);  // Avoid flooding with data
+}
+
+// Send sensor values to Blynk
+void sensorvalue1() {
+  int methaneValue = analogRead(pinSensor);
+  Blynk.virtualWrite(V12, methaneValue);  // Send to Blynk virtual pin V12
+}
