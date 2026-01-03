@@ -1,0 +1,68 @@
+import time
+import grovepi
+from grove_rgb_lcd import *
+
+# Define ports
+METHANE_SENSOR = 0         # Methane sensor connected to A0
+BUZZER = 2                 # Buzzer connected to D2
+LED = 3                    # Regular LED connected to D3
+RGB_LED = 4                # RGB LED connected to D4
+
+# Define methane concentration thresholds (adjust as needed)
+SAFE_THRESHOLD = 100       # Below this is safe
+CAUTION_THRESHOLD = 300    # Caution zone
+DANGER_THRESHOLD = 600     # Danger zone - spoilage detected
+
+# Set up the pins
+grovepi.pinMode(METHANE_SENSOR, "INPUT")
+grovepi.pinMode(BUZZER, "OUTPUT")
+grovepi.pinMode(LED, "OUTPUT")
+grovepi.pinMode(RGB_LED, "OUTPUT")
+
+def set_rgb_color(r, g, b):
+    """Set the color of the Grove RGB LED."""
+    grovepi.analogWrite(RGB_LED, r)
+    grovepi.analogWrite(RGB_LED+1, g)
+    grovepi.analogWrite(RGB_LED+2, b)
+
+try:
+    while True:
+        # Read the methane sensor value
+        methane_level = grovepi.analogRead(METHANE_SENSOR)
+        print(f"Methane Level: {methane_level}")
+
+        # Set color and alerts based on methane level
+        if methane_level < SAFE_THRESHOLD:
+            # Safe level - Green LED, no buzzer
+            set_rgb_color(0, 255, 0)  # Green
+            grovepi.digitalWrite(BUZZER, 0)
+            grovepi.digitalWrite(LED, 0)
+            setText("Status: Safe")
+
+        elif SAFE_THRESHOLD <= methane_level < CAUTION_THRESHOLD:
+            # Caution level - Yellow LED, no buzzer
+            set_rgb_color(255, 255, 0)  # Yellow
+            grovepi.digitalWrite(BUZZER, 0)
+            grovepi.digitalWrite(LED, 1)
+            setText("Status: Caution")
+
+        elif methane_level >= DANGER_THRESHOLD:
+            # Danger level - Red LED, buzzer on
+            set_rgb_color(255, 0, 0)  # Red
+            grovepi.digitalWrite(BUZZER, 1)
+            grovepi.digitalWrite(LED, 1)
+            setText("Status: Spoiled")
+
+        # Wait before next reading
+        time.sleep(1)
+
+except KeyboardInterrupt:
+    # Reset outputs on exit
+    set_rgb_color(0, 0, 0)
+    grovepi.digitalWrite(BUZZER, 0)
+    grovepi.digitalWrite(LED, 0)
+    setText("System stopped")
+    print("Program terminated")
+
+except IOError:
+    print("Error reading sensor values.")
