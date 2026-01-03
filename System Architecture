@@ -1,0 +1,71 @@
+The system architecture is designed in a layered and modular manner, ensuring reliable monitoring, processing, and alert generation for food spoilage detection.
+
+ 1. Sensing Layer
+
+This layer is responsible for data acquisition from the food environment.
+
+Gas sensors (MQ series) are used to detect harmful gases such as ammonia and methane released during food decomposition.
+
+Temperature and humidity sensors (DHT11/DHT22) monitor environmental conditions that directly affect food freshness and spoilage rate.
+
+Sensors continuously collect real-time data from the storage area where food is placed.
+
+ 2. Processing & Control Layer
+
+The Raspberry Pi acts as the central controller and processing unit of the system.
+
+Sensor data is read through GPIO pins and processed using Python programs.
+
+The collected values are compared against predefined threshold limits to determine whether the food is fresh, at risk, or spoiled.
+
+Decision logic is implemented to ensure accurate classification and minimize false alerts.
+
+ 3. Data Analysis Layer
+
+Real-time sensor readings are analyzed to identify abnormal patterns.
+
+Combined analysis of gas concentration and environmental parameters improves detection accuracy.
+
+This layer can be extended to include machine learning models for predictive spoilage detection in future upgrades.
+
+ 4. Alert & Notification Layer
+
+When spoilage is detected, the system triggers local alerts using buzzers or LEDs for immediate attention.
+
+Alerts help users take quick action such as discarding or relocating food items.
+
+This ensures food safety and reduces health risks.
+
+ 5. Communication & IoT Layer
+
+The Raspberry Pi’s built-in Wi-Fi module enables IoT connectivity.
+
+Sensor data and spoilage status can be transmitted to a cloud platform or web dashboard.
+
+Users can remotely monitor food conditions and receive notifications via mobile or web applications.
+
+ 6. User Interface Layer
+
+Data visualization can be provided through a web dashboard or mobile app.
+
+Users can view real-time readings, spoilage status, and alert history.
+
+This layer improves usability and makes the system suitable for homes, restaurants, and warehouses.
+
+ 7. Scalability & Future Enhancement Layer
+
+The architecture supports easy integration of additional sensors or cameras.
+
+AI-based spoilage prediction, cloud analytics, and mobile app notifications can be added without redesigning the entire system.
+
+The modular design ensures scalability for large food storage environments.
+
+8 Architectural Benefits
+
+Real-time monitoring and decision-making
+
+Modular and scalable design
+
+Cost-effective and energy-efficient
+
+Suitable for IoT-based smart food management systems
