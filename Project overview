@@ -1,0 +1,156 @@
+This project implements an IoT-based Food Spoilage Detection System using the Raspberry Pi Pico W (RP2040). The system continuously monitors methane gas levels released during food decomposition using an MQ-4 sensor. When spoilage is detected, it triggers local alerts (LED, buzzer, LCD) and remote alerts via Wi-Fi, storing data in a PHP–MySQL backend and enabling real-time web monitoring.
+
+1.Hardware Architecture & Connections
+1Power Supply
+
+Powered via USB (5V) or external supply
+
+VSYS (Pin 39): Main power input
+
+3.3V (Pin 36): Regulated output for logic components
+
+GND: Common ground (Pins 3, 8, 13, 18, 23, 28, 33, 38)
+
+2️.Wireless Connectivity
+
+Built-in Wi-Fi module (Pico W)
+
+No external ESP8266 required
+
+Used for:
+
+Web dashboard connectivity
+
+PHP/MySQL database updates
+
+Email and HTTP alert notifications
+
+3. Display & Visual Indicators
+ 16×2 LCD Display (I2C Mode)
+
+SDA → GP0 (Pin 1)
+
+SCL → GP1 (Pin 2)
+
+VCC → 5V
+
+GND → GND
+Displays real-time gas sensor values and system status.
+
+🔹 LED Indicators
+
+Green LED (GP5): Normal/Fresh condition
+
+Red LED (GP4): Spoilage detected
+
+Connected via 220–330Ω current-limiting resistors
+
+4️ Alarm System
+
+Buzzer → GP7
+
+Activated immediately when gas concentration crosses threshold
+
+Works independently of internet connectivity
+
+5️ MQ-4 Methane Gas Sensor
+
+VCC → 5V
+
+GND → GND
+
+Analog Output → ADC0 (GP26)
+
+Pico W’s internal ADC is used (no external ADC required)
+
+6 Pin Configuration Summary
+PIN_CONFIG = {
+    'I2C_SDA': 0,        # GP0
+    'I2C_SCL': 1,        # GP1
+    'LED_GREEN': 5,      # GP5
+    'LED_RED': 4,        # GP4
+    'BUZZER': 7,         # GP7
+    'MQ4_SENSOR': 26,    # ADC0 (GP26)
+    'ONBOARD_LED': 25    # Built-in LED
+}
+
+7 Software Architecture (MicroPython)
+
+Language: MicroPython
+
+Core Modules:
+
+machine (GPIO, ADC, I2C)
+
+network (Wi-Fi)
+
+urequests (HTTP communication)
+
+Reads sensor values periodically
+
+Compares readings against calibrated thresholds
+
+Updates LCD and triggers alerts
+
+Sends data to backend server via HTTP POST
+
+8 Web & IoT Integration
+ Server Stack
+
+PHP-enabled web server
+
+MySQL database
+
+SSL-enabled email alert system
+
+9 Database Schema
+CREATE TABLE sensor_readings (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    reading_value FLOAT,
+    timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
+    alert_sent BOOLEAN DEFAULT FALSE
+);
+
+10 Web Dashboard Features
+
+Live gas level monitoring
+
+Historical data visualization
+
+Alert status tracking
+
+System health monitoring
+
+11 Reliability & Safety Considerations
+
+Local alerts work even without internet
+
+Automatic Wi-Fi reconnection handling
+
+Sensor calibration in clean-air conditions
+
+Stable power supply for MQ-4 sensor
+
+Data logging for debugging and analysis
+
+12 Key Highlights
+
+Real-time food spoilage detection
+
+Built-in Wi-Fi (no external modules)
+
+Local + remote alert mechanisms
+
+Scalable IoT architecture
+
+Suitable for homes, restaurants, and storage units
+
+13 Ideal For
+
+IoT portfolios
+
+Embedded systems projects
+
+Smart food management research
+
+GitHub technical showcase
