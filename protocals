@@ -1,0 +1,76 @@
+Web & Network Protocols Used
+
+### 1. **HTTPS (HTTP over TLS)**
+
+* Secure communication between browser and server
+* Encrypts data (login info, API requests)
+* Default for all `.lovable.app` deployments
+
+---
+
+### 2. **HTTP / REST API**
+
+* Client–server communication
+* Used for:
+
+  * Form submissions
+  * Fetching/storing data
+  * Backend actions
+* Methods used: `GET`, `POST`, `PUT`, `DELETE`
+
+---
+
+### 3. **TLS / SSL**
+
+* Security layer for HTTPS
+* Prevents data interception and man-in-the-middle attacks
+
+---
+
+### 4. **DNS (Domain Name System)**
+
+* Resolves
+  `nuradhapriyasha.lovable.app → server IP address`
+
+---
+
+## 🔐 Authentication & Authorization Protocols
+
+### 5. **OAuth 2.0 (if login via Google/GitHub is enabled)**
+
+* Secure third-party authentication
+* No password sharing
+
+---
+
+### 6. **JWT (JSON Web Token)**
+
+* Used for session management
+* Stores user authentication state securely
+
+---
+
+## 🔄 Real-Time / Backend Support (Optional)
+
+### 7. **WebSockets**
+
+* Used if the app supports:
+
+  * Real-time updates
+  * Live chat
+  * Instant notifications
+
+---
+
+### 8. **CORS (Cross-Origin Resource Sharing)**
+
+* Allows frontend to safely access backend APIs hosted on different domains
+
+---
+
+## 📊 Data Format Protocols
+
+### 9. **JSON**
+
+* Standard data exchange format between frontend & backend
+* Lightweight and fast
